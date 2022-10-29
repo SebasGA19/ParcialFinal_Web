@@ -16,4 +16,9 @@ type ArticleObj = {
     discount: number
 };
 
-export type { ArticleObj, Filter };
+type ArticleResult = {
+    pages: number,
+    articles: ArticleObj[]
+};
+
+export type { ArticleObj, Filter, ArticleResult};

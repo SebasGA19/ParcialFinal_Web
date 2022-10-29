@@ -1,7 +1,7 @@
 import { apiBaseURL } from "./config";
-import type { ArticleObj, Filter } from "./types";
+import type { Filter, ArticleResult } from "./types";
 
-export async function articles(page: number, filter: Filter): Promise<ArticleObj[]> {
+export async function articles(page: number, filter: Filter): Promise<ArticleResult> {
     const response = await fetch(apiBaseURL + `/articles/${page}`, {
         method: "POST",
         headers: {

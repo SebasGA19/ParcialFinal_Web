@@ -1,12 +1,14 @@
 import base64
 import flask
 from flask import request
+from flask_cors import CORS
 import sqlite3
 import json
 import random
 
 
 app = flask.Flask(__name__)
+CORS(app)
 cookie_s = {}
 with open('json/data.json', "rb") as file:
     articles = json.load(file)
@@ -100,13 +102,8 @@ def article_id(id):
 
 @app.route('/images/<id>', methods=['GET'])
 def images_id(id):
-    for article in articles:
-        if (article['id'] == id):
-            with open("images/"+id+".jpg", "rb") as image_file:
-                encoded_string = base64.b64encode(image_file.read())
-            alt = id+".jpg"
-
-    return json.dumps({"alt": alt, "contents": encoded_string})
+    with open("images/"+id+".jpg", "rb") as image_file:
+        return image_file.read()
 
 
 def main():

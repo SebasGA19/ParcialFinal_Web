@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { apiBaseURL } from '../api/config';
 	import type { ArticleObj } from 'src/api/types';
 	import { basket } from '../stores/basket';
 	import BasketButtonOperation from './basket/basketButtonOperation.svelte';
@@ -13,7 +14,11 @@
 	<div class="card product-card positiion-relative">
 		<Favourite />
 		<a href="#" data-bs-toggle="modal" data-bs-target="#articleModal{article.id}">
-			<img class="card-img-top position-relative" alt={article.alt} src={article.image} />
+			<img
+				class="card-img-top position-relative"
+				alt={article.alt}
+				src={`${apiBaseURL}${article.image}`}
+			/>
 		</a>
 		<div class="card-body text-center">
 			<h4 class="card-title">{article.name}</h4>
@@ -43,7 +48,12 @@
 				<div class="container">
 					<div class="row row-cols-1 row-cols-md-2 g-4">
 						<div class="col">
-							<img id="{article.id}Image" alt={article.alt} src={article.image} class="w-50" />
+							<img
+								id="{article.id}Image"
+								alt={article.alt}
+								src={`${apiBaseURL}${article.image}`}
+								class="w-50"
+							/>
 						</div>
 						<div class="col">
 							<h1 class="mb-3">{article.name}</h1>
@@ -72,7 +82,7 @@
 		transition-duration: 1s;
 		padding: 2vh 1vw;
 		border: none;
-		height: 500px;
+		height: 650px;
 	}
 
 	.product-card:hover {
