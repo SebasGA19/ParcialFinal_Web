@@ -1,0 +1,196 @@
+openapi: 3.0.3
+
+components:
+  schemas:
+    article:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: Locion
+        descripcion:
+          type: string
+          example: Locion olor naranja
+        marca:
+          type: string
+          example: BOSS
+        precio:
+          type: number
+          example: 10
+        descuento:
+          type: number
+          example: 10
+        imagen:
+          type: string
+          example: /images/{id}
+    filter:
+      type: object
+      properties:
+        pattern:
+          type: string
+          example: Locion
+        price-from:
+          type: number
+          example: 0
+        price-to:
+          type: number
+          example: 1000
+
+
+info:
+  title: Parcial API
+  description: |-
+    Documentacion del API para el parcial de desarrollo web
+  contact:
+    email: antoniojosedonishung@gmail.com
+  license:
+    name: MIT
+  version: 0.9.0
+
+tags:
+  - name: Autenticacion
+    description: Autenticacion de usuarios
+  - name: Articulos
+    description: Consulta de articulos
+  - name: Carrito
+    description: Agregar o eliminar articulos del carrito de compras
+
+paths:
+  /register:
+    put:
+      tags:
+        - Autenticacion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                names:
+                  type: string
+                  example: Antonio Sebastian Juan
+                last-names:
+                  type: string
+                  example: Donis Gomez Paez
+                email:
+                  type: string
+                  example: usuario@mail.com
+                password:
+                  type: string
+                  example: secreto
+      responses:
+        '200':
+          description: Imagen del articulo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alt:
+                    type: string
+                    example: Locion
+                  contents:
+                    type: string
+                    example: ====
+        '500':
+          description: internal server error
+  /images/{id}:
+    get:
+      tags:
+        - Articulos
+      summary: Consultar imagen del articulo
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 10
+          required: true
+      responses:
+        '200':
+          description: Imagen del articulo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alt:
+                    type: string
+                    example: Locion
+                  contents:
+                    type: string
+                    example: ====
+        '500':
+          description: internal server error
+  /articles/{page}:
+    post:
+      tags:
+        - Articulos
+      summary: Vitrina
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/filter'
+      responses:
+        '200':
+          description: Listado de articulos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/article'
+        '500':
+          description: internal server error
+  /basket:
+    get:
+      tags:
+        - Carrito
+      summary: consultar carrito de compras
+      responses:
+        '200':
+          description: Listado de articulos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    articulo:
+                      $ref: '#/components/schemas/article'
+                    cantidad:
+                      type: number
+                      example: 10
+        '500':
+          description: internal server error
+  /basket/{id}/{amount}:
+    post:
+      tags:
+        - Carrito
+      summary: Anadir articulo al carrito
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 10
+          description: id del producto
+          required: true
+        - in: path
+          name: amount
+          schema:
+            type: number
+            example: 10
+          description: cantidad del producto
+          required: true
+      responses:
+        '200':
+          description: Producto anadido con exito
+        '500':
+          description: internal server error
