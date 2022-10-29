@@ -1,10 +1,9 @@
-<script>
+<script lang="ts">
+	import type { ArticleObj } from 'src/api/types';
 	import { basket } from '../../stores/basket';
 	import Orange from '../buttons/orange.svelte';
     
-	export let article = {
-		id: 10,
-	};
+	export let article: ArticleObj;
 	function addToBasket() {
 		($basket)[article.id] = {article: article, amount: 1};
 	}

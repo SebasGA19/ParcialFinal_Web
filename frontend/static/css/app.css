@@ -37,77 +37,8 @@
 }
 
 /*
-    Products
-*/
-
-.product-card {
-    transition: all 0.5s;
-    padding: 2vh 1vw;
-    border: none;
-}
-
-.product-card:hover {
-    border: 1px solid black;
-    z-index: +100;
-    transform: scale(1.025);
-}
-
-.product-card>.card-body>.orange-button {
-    display: none;
-}
-
-.product-card:hover>.card-body>.orange-button {
-    display: inline;
-}
-
-.product-card>.card-body>.card-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.product-card:hover>.card-body>.card-title {
-    white-space: initial;
-    overflow: visible;
-    text-overflow: none;
-}
-
-/*
     Buttons
 */
-
-.orange-button {
-    border-radius: 50px;
-    background-color: #EFA229;
-    color: white;
-}
-
-.orange-button:hover {
-    background-color: #F3B24A;
-    color: white;
-}
-
-.green-button {
-    border-radius: 50px;
-    background-color: #009929;
-    color: white;
-}
-
-.green-button:hover {
-    background-color: #006414;
-    color: white;
-}
-
-.blue-button {
-    border-radius: 50px;
-    background-color: #3498db;
-    color: white;
-}
-
-.blue-button:hover {
-    background-color: #2980b9;
-    color: white;
-}
 
 
 .pagination-button {
@@ -118,15 +49,4 @@
 
 .pagination-button:hover {
     background-color: aliceblue;
-}
-
-.favorite-button {
-    z-index: +1000;
-    font-size: large;
-    color: #E80729;
-}
-
-.favorite-button:hover {
-    z-index: +1000;
-    color: #EF2947;
 }

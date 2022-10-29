@@ -1,5 +1,5 @@
-<script>
-	export let onclick = () => {};
+<script lang="ts">
+	export let onclick: () => any;
 </script>
 
 <button on:click={onclick} class="btn orange-button">

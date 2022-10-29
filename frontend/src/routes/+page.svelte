@@ -1,30 +1,13 @@
-<script>
-    import Article from '../components/article.svelte';
+<script lang="ts">
+	import type {Filter} from "../api/types";
+	import { articles } from "../api/routes";
+
+    let page: number = 1;
+    let filter: Filter = {};
+    articles(page, filter)
+    .then(results => console.log(results));
 </script>
 
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-4 mt-3">
-        <Article/>
-        <Article/>
-        <Article/>
-        <Article/>
-    </div>
-    <div class="row row-cols-1 row-cols-md-4 mt-3">
-        <Article/>
-        <Article/>
-        <Article/>
-        <Article/>
-    </div>
-    <div class="row row-cols-1 row-cols-md-4 mt-3">
-        <Article/>
-        <Article/>
-        <Article/>
-        <Article/>
-    </div>
-    <div class="row row-cols-1 row-cols-md-4 mt-3">
-        <Article/>
-        <Article/>
-        <Article/>
-        <Article/>
-    </div>
+
 </div>
