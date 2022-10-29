@@ -95,12 +95,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  alt:
+                  cookie:
                     type: string
-                    example: Locion
-                  contents:
-                    type: string
-                    example: ====
+                    example: RANDOM_GENERATED_STRING
         '500':
           description: internal server error
   /images/{id}:
@@ -147,6 +144,28 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/filter'
+      responses:
+        '200':
+          description: Listado de articulos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/article'
+        '500':
+          description: internal server error
+  /article/{id}:
+    post:
+      tags:
+        - Articulos
+      summary: Vitrina
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
       responses:
         '200':
           description: Listado de articulos
