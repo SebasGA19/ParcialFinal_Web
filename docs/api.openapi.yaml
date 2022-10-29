@@ -5,22 +5,31 @@ components:
     article:
       type: object
       properties:
-        nombre:
+        id:
+          type: number
+          example: 10
+        amount:
+          type: number
+          example: 60
+        metric:
+          type: string
+          example: UND
+        name:
           type: string
           example: Locion
-        descripcion:
+        description:
           type: string
           example: Locion olor naranja
-        marca:
+        brand:
           type: string
           example: BOSS
-        precio:
+        price:
           type: number
           example: 10
-        descuento:
+        discount:
           type: number
           example: 10
-        imagen:
+        image:
           type: string
           example: /images/{id}
     filter:
