@@ -8,17 +8,20 @@ import random
 
 app = flask.Flask(__name__)
 cookie_s = {}
-with open('json/data.json',"rb") as file:
+with open('json/data.json', "rb") as file:
     articles = json.load(file)
+
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
+
 @app.route('/')
 def index():
     return "hola"
+
 
 @app.route('/register', methods=['PUT'])
 def register():
@@ -29,80 +32,86 @@ def register():
     email = None
     password = None
 
-    if(request_data):
+    if (request_data):
         if 'names' in request_data:
-            names=request_data['names']
+            names = request_data['names']
 
         if 'last-names' in request_data:
-            last_names=request_data['last-names']
+            last_names = request_data['last-names']
 
         if 'email' in request_data:
-            email=request_data['email']
+            email = request_data['email']
 
         if 'password' in request_data:
-            password=request_data['password']
-
+            password = request_data['password']
 
     conn = get_db_connection()
     conn.execute('INSERT INTO users (names, last_names, email, password) VALUES (?, ?, ?, ?)',
-                    (names,last_names,email,password))
+                 (names, last_names, email, password))
     conn.commit()
     conn.close()
 
-    cookie = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(62))
-    cookie_s[cookie]=email
+    cookie = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz')
+                     for _ in range(62))
+    cookie_s[cookie] = email
     return json.dumps({"cookie": cookie})
 
+
 @app.route('/articles/<page>', methods=['POST'])
-def articles_pag(page):
+def articles_pag(page: str):
     page = int(page)
     request_data = request.get_json()
-    articles_filt = []
-    pattern = None
-    price_from = None
-    price_to = None
+    result = articles
 
-    if(request_data):
-        if 'pattern' in request_data:
-            pattern = request_data['pattern']
+    if request_data:
+        result = []
+        pattern = request_data['pattern'] if 'pattern' in request_data else None
+        pattern = pattern.lower() if pattern is not None else None
+        price_from = request_data['price-from'] if 'price-from' in request_data else None
+        price_to = request_data['price-to'] if 'price-to' in request_data else None
+        for article in articles:
+            price = article['price']
+            name = article['name'].lower()
 
-        if 'price-from' in request_data:
-            price_from = request_data['price-from']
+            if pattern is not None and pattern not in name:
+                continue
+            if price_from is not None and price_from > price:
+                continue
+            if price_to is not None and price_to < price:
+                continue
+            result.append(article)
 
-        if 'price-to' in request_data:
-            price_to = request_data['price-to']
+    range_low = (page-1)*12
+    range_high = (page)*12
+    pages = int(len(result) / 12) + 1
 
-    print(articles)
-    for article in articles:
-        price = article['price']
-        name = article['name']
+    return json.dumps({
+        "pages": pages,
+        "articles": result[range_low:range_high]
+    })
 
-        if(price_from<price and price<price_to):
-            if(pattern.lower() in name.lower()):
-                articles_filt.append(article)
-
-    range_low= (page-1)*12
-    range_high= (page)*12
-    return json.dumps(articles_filt[range_low:range_high])
 
 @app.route('/article/<id>', methods=['POST'])
 def article_id(id):
     for article in articles:
-        if(article['id']==id):
+        if (article['id'] == id):
             return article
+
 
 @app.route('/images/<id>', methods=['GET'])
 def images_id(id):
     for article in articles:
-        if(article['id']== id):
-            with open("images/"+id+".jpg","rb") as image_file:
+        if (article['id'] == id):
+            with open("images/"+id+".jpg", "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read())
             alt = id+".jpg"
 
-    return json.dumps({"alt": alt,"contents": encoded_string})
+    return json.dumps({"alt": alt, "contents": encoded_string})
+
 
 def main():
     app.run()
+
 
 if __name__ == "__main__":
     main()
