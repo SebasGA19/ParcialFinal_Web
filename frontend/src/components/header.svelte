@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { apiBaseURL } from '../api/config';
 	import { basket } from '../stores/basket';
+
+	export let patternFilter: string = "";
+	export let searchCallback: () =>any;
 </script>
 
 <!-- Navbar-->
@@ -19,13 +22,13 @@
 		</button>
 		<div class="collapse navbar-collapse text-center" id="navarToggler">
 			<ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-75">
-				<form class="d-flex p-1 ps-2 pe-2 mt-1 w-100 search-box">
+				<form class="d-flex p-1 ps-2 pe-2 mt-1 w-100 search-box"
+				on:submit|preventDefault={searchCallback}>
 					<input
 						class="form-control"
-						type="search"
 						placeholder="Que productos estas buscando?"
 						aria-label="Que productos estas buscando?"
-						id="searchBar"
+						bind:value={patternFilter}
 					/>
 					<button class="btn" type="submit">
 						<i class="fa-solid fa-magnifying-glass" />
@@ -78,7 +81,6 @@
 						<span
 							class="position-absolute translate-middle badge rounded-pill bg-secondary"
 							style="top: 10%;"
-							id="numberOfProductsInBasket"
 						>
 							{Object.keys($basket).length}
 							<span class="visually-hidden">unread messages</span>
@@ -104,13 +106,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title text-success" id="basketModalLabel">
-					Mi carrito (<span id="numberOfProductsInBasketTitle">0</span>)
+					Mi carrito (<span>0</span>)
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
 				<div class="container">
-					<div id="basketProducts" class="justify-content-center">
+					<div class="justify-content-center">
 						{#key $basket}
 							{#each Object.keys($basket) as articleId}
 								<div class="row row-cols-1 row-cols-md-7">
@@ -121,23 +123,25 @@
 											alt={$basket[articleId].article.alt}
 										/>
 									</div>
-                                    <div class="col">
-                                        <div class="container">
-                                            <div class="row w-100">
-                                                <div class="col col-8">
-                                                    <h3 class="text-left wrap-text">{$basket[articleId].article.name}</h3>
-                                                </div>
-                                                <div class="col col-4">
-                                                    <button type="button" class="col-2 btn-close" />
-                                                </div>
-                                            </div>
-                                            <h6>{1}</h6>
-                                            <div class="d-flex justify-content-between">
-                                                <h6>Canitdad: {$basket[articleId].amount}</h6>
-                                                <h5>{$basket[articleId].article.price * $basket[articleId].amount} &euro;</h5>
-                                            </div>
-                                        </div>
-                                    </div>
+									<div class="col">
+										<div class="container">
+											<div class="row w-100">
+												<div class="col col-8">
+													<h3 class="text-left wrap-text">{$basket[articleId].article.name}</h3>
+												</div>
+												<div class="col col-4">
+													<button type="button" class="col-2 btn-close" />
+												</div>
+											</div>
+											<h6>{1}</h6>
+											<div class="d-flex justify-content-between">
+												<h6>Canitdad: {$basket[articleId].amount}</h6>
+												<h5>
+													{$basket[articleId].article.price * $basket[articleId].amount} &euro;
+												</h5>
+											</div>
+										</div>
+									</div>
 								</div>
 							{/each}
 						{/key}
@@ -145,12 +149,12 @@
 					<hr />
 					<div class="d-flex justify-content-between">
 						<h7>Subtotal:</h7>
-						<h7><span id="subtotalBasket" />&euro;</h7>
+						<h7><span />&euro;</h7>
 					</div>
 					<hr />
 					<div class="d-flex justify-content-between text-success">
 						<h4 style="color: #009929;">TOTAL (IVA incluido):</h4>
-						<h4 class="text-success"><span id="totalBasket" />&euro;</h4>
+						<h4 class="text-success"><span />&euro;</h4>
 					</div>
 					<hr />
 					<p class="text-success">Te falta 6.99 &euro; para disfrutar del envio gratis</p>
