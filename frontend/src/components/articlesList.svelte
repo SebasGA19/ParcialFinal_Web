@@ -11,12 +11,18 @@
 		if (result == undefined) {
 			{
 			}
-			articles(1, filter).then((r) => (result = r));
+			articles(1, filter).then((r) => {
+				result = r;
+				currentPage = 1;
+			});
 		}
 	});
 	$: {
 		filter;
-		articles(1, filter).then((r) => (result = r));
+		articles(1, filter).then((r) => {
+			result = r;
+			currentPage = 1;
+		});
 	}
 </script>
 
