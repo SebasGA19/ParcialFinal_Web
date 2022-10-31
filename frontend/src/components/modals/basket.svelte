@@ -3,25 +3,25 @@
 	import { apiBaseURL } from '../../api/config';
 	import { basket } from '../../stores/basket';
 
-    let total: number = 0;
-    let subTotal: number = 0;
-    let keys: string[];
-    let amount: number = 0;
-    function refresh() {
-        keys = Object.keys($basket);
-        amount = keys.length;
-        subTotal = 0;
-        keys.forEach(id => {
-            const entry = $basket[id];
-            subTotal += entry.amount * entry.article.price;
-        });
-        total = subTotal * 1.19
-    }
-    onMount(refresh);
-    $ : {
-        $basket;
-        refresh();
-    }
+	let total: number = 0;
+	let subTotal: number = 0;
+	let keys: string[];
+	let amount: number = 0;
+	function refresh() {
+		keys = Object.keys($basket);
+		amount = keys.length;
+		subTotal = 0;
+		keys.forEach((id) => {
+			const entry = $basket[id];
+			subTotal += entry.amount * entry.article.price;
+		});
+		total = subTotal * 1.19;
+	}
+	onMount(refresh);
+	$: {
+		$basket;
+		refresh();
+	}
 </script>
 
 <!--Basket Modal-->
@@ -87,14 +87,18 @@
 						<h4 class="text-success">{total.toFixed(2)}<span />&euro;</h4>
 					</div>
 					<hr />
-                    {#if total < 50 && subTotal > 0}
-                    <p class="text-success">Te falta {(50 - total).toFixed(2)} &euro; para disfrutar del envio gratis</p>
+					{#if total < 50 && subTotal > 0}
+						<p class="text-success">
+							Te falta {(50 - total).toFixed(2)} &euro; para disfrutar del envio gratis
+						</p>
+					{:else if total >= 50 && subTotal > 0}
+						<p class="text-success">Tu envio es gratis</p>
 					{/if}
 				</div>
-				<button class="btn w-100 green-button" style="border-radius: 50px;">Ir al carrito</button>
-				<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;"
-					>Realizar el pedido</button
-				>
+				<button class="btn w-100 green-button" style="border-radius: 50px;"> Ir al carrito </button>
+				<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;">
+					Realizar el pedido
+				</button>
 			</div>
 		</div>
 	</div>
