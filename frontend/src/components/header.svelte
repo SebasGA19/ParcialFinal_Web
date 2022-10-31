@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { apiBaseURL } from '../api/config';
 	import { basket } from '../stores/basket';
 	import Basket from './modals/basket.svelte';
 
-	export let patternFilter: string = '';
+	export let minPrice: number = 0;
+	export let maxPrice: number = 100;
+	export let pattern: string = '';
 	export let searchCallback: () => any;
+	export let priceCallback: () => any;
 </script>
 
 <!-- Navbar-->
@@ -31,8 +33,18 @@
 						class="form-control"
 						placeholder="Que productos estas buscando?"
 						aria-label="Que productos estas buscando?"
-						bind:value={patternFilter}
+						bind:value={pattern}
 					/>
+					<button
+						class="btn text-reset"
+						style="background-color: transparent;"
+						type="button"
+						data-bs-toggle="offcanvas"
+						data-bs-target="#offcanvasFilter"
+						aria-controls="offcanvasFilter"
+					>
+						<i class="fa-solid fa-filter" />
+					</button>
 					<button class="btn" type="submit">
 						<i class="fa-solid fa-magnifying-glass" />
 					</button>
@@ -97,12 +109,67 @@
 	</div>
 </nav>
 
+<!--Filters-->
+<div
+	class="offcanvas offcanvas-start"
+	tabindex="-1"
+	id="offcanvasFilter"
+	aria-labelledby="offcanvasFilterLabel"
+>
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasFilterLabel">Filtros</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
+	</div>
+	<div class="offcanvas-body">
+		<div class="container mt-3">
+			<input
+				type="range"
+				class="form-range"
+				id="filterMaxPriceValueRange"
+				min="0"
+				max="100"
+				bind:value={maxPrice}
+			/>
+			<div class="d-flex">
+				<div class="w-50 me-1">
+					<label>Desde:</label>
+					<input
+						class="form-control"
+						type="number"
+						id="filterMinPriceValueNumber"
+						min="0"
+						max="100"
+						bind:value={minPrice}
+					/>
+				</div>
+				<div class="w-50">
+					<label>Hasta:</label>
+					<input
+						class="form-control"
+						type="number"
+						id="filterMaxPriceValueNumber"
+						min="0"
+						max="100"
+						bind:value={maxPrice}
+					/>
+				</div>
+			</div>
+			<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;" on:click={priceCallback}>Filtrar</button>
+		</div>
+	</div>
+</div>
+
 <Basket />
 
 <style>
-	.wrap-text {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	.green-button {
+		border-radius: 50px;
+		background-color: #009929;
+		color: white;
+	}
+
+	.green-button:hover {
+		background-color: #006414;
+		color: white;
 	}
 </style>
