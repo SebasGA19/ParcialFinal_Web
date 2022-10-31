@@ -5,6 +5,7 @@
 	import BasketButtonOperation from './basket/basketButtonOperation.svelte';
 	import BasketCounterOperation from './basket/basketCounterOperation.svelte';
 	import Favourite from './favourite.svelte';
+	import Discount from './discount.svelte';
 
 	export let article: ArticleObj;
 </script>
@@ -13,6 +14,7 @@
 <div class="col">
 	<div class="card product-card positiion-relative">
 		<Favourite />
+		<Discount discount={article.discount} />
 		<a href="#" data-bs-toggle="modal" data-bs-target="#articleModal{article.id}">
 			<img
 				class="card-img-top position-relative"
@@ -58,11 +60,14 @@
 							/>
 						</div>
 						<div class="col">
-							<h1 class="mb-3">{article.name}</h1>
+							<div class="position-relative text-center">
+								<h1 class="mb-3">{article.name}</h1>
+								<Discount discount={article.discount} />
+								<Favourite />
+							</div>
 							<h5 class="mb-3">{`${article.amount} ${article.metric}`}</h5>
 							<h2 class="text-success mb-0">{article.price} &euro</h2>
-							<h7 class="mt-0">{article.discount}</h7>
-							<p class="mt-5">{article.description}</p>
+							<p class="mt-5" style="text-align: justify;">{article.description}</p>
 							<div class="d-flex justify-content-between">
 								<BasketButtonOperation bind:article />
 								{#key $basket}

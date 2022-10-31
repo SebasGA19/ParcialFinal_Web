@@ -13,7 +13,7 @@
 		subTotal = 0;
 		keys.forEach((id) => {
 			const entry = $basket[id];
-			subTotal += entry.amount * entry.article.price;
+			subTotal += entry.amount * entry.article.price * (1 - entry.article.discount / 100);
 		});
 		total = subTotal * 1.19;
 	}
