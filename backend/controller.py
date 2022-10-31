@@ -54,3 +54,8 @@ def articles(page: int, pattern: str = "", min_price: int = 0, max_price: int = 
         "pages": pages,
         "articles": result[range_low:range_high]
     }
+
+
+def image(img_id: str or int) -> bytes:
+    with open("images/"+img_id+".jpg", "rb") as image_file:
+        return image_file.read()
