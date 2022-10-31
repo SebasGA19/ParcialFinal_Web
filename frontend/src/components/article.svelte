@@ -21,9 +21,11 @@
 			/>
 		</a>
 		<div class="card-body text-center">
-			<h4 class="card-title">{article.name}</h4>
-			<h6 class="card-text">{`${article.amount} ${article.metric}`}</h6>
-			<h5 class="text-success">{article.price} &euro</h5>
+			<div class="article-body">
+				<h4 class="card-title">{article.name}</h4>
+				<h6 class="card-text">{`${article.amount} ${article.metric}`}</h6>
+				<h5 class="text-success">{article.price} &euro</h5>
+			</div>
 			<div class="card-basket-button">
 				<BasketButtonOperation bind:article />
 			</div>
@@ -82,7 +84,7 @@
 		transition-duration: 1s;
 		padding: 2vh 1vw;
 		border: none;
-		height: 650px;
+		height: 600px;
 	}
 
 	.product-card:hover {
@@ -99,15 +101,26 @@
 		display: inline;
 	}
 
-	.product-card > .card-body > .card-title {
+	.article-body {
+		height: 140px;
+	}
+
+	.card-title {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.product-card:hover > .card-body > .card-title {
+	.product-card:hover .card-title {
 		white-space: initial;
 		overflow: visible;
 		text-overflow: none;
+		max-height: 100px;
+		overflow: hidden;
+		line-height: normal;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		text-overflow: ellipsis;
 	}
 </style>

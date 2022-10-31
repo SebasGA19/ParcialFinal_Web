@@ -1,18 +1,57 @@
 <script lang="ts">
-	import type { ArticleObj } from "../api/types";
-	import Article from "./article.svelte";
+	import { onMount } from 'svelte';
+	import { articles } from '../api/routes';
+	import type { ArticleResult, Filter } from '../api/types';
+	import Article from './article.svelte';
 
-    export let articles: ArticleObj[];
-
-    $ : {
-        console.log(articles)
-    }
+	let currentPage: number = 1;
+	let result: ArticleResult = { pages: 1, articles: [] };
+	export let filter: Filter;
+	onMount(() => {
+		if (result == undefined) {
+			{
+			}
+			articles(1, filter).then((r) => (result = r));
+		}
+	});
+	$: {
+		filter;
+		articles(1, filter).then((r) => (result = r));
+	}
 </script>
 
-<div class="row row-cols-1 row-cols-md-4 mt-3">
-{#key articles}
-	{#each articles as article}
-		<Article article={article}/>
-	{/each}
+{#key result}
+	<div class="row row-cols-1 row-cols-md-4 mt-3">
+		{#each result.articles as article}
+			<Article {article} />
+		{/each}
+	</div>
+
+	<div class="container mt-5 p-5">
+		{#each Array(result.pages) as _, page}
+			{#if page + 1 === currentPage}
+				<button
+					class="btn border-5 btn-secondary pagination-button"
+					on:click={() => {
+						articles(page + 1, filter).then((r) => {
+							result = r;
+							currentPage = page + 1;
+							scroll(0, 0);
+						});
+					}}>{page + 1}</button
+				>
+			{:else}
+				<button
+					class="btn border-5 pagination-button"
+					on:click={() => {
+						articles(page + 1, filter).then((r) => {
+							result = r;
+							currentPage = page + 1;
+							scroll(0, 0);
+						});
+					}}>{page + 1}</button
+				>
+			{/if}
+		{/each}
+	</div>
 {/key}
-</div>
