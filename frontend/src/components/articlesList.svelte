@@ -33,7 +33,7 @@
 		{/each}
 	</div>
 
-	<div class="container mt-5 p-5">
+	<div class="container mt-1 p-5 text-center">
 		{#each Array(result.pages) as _, page}
 			{#if page + 1 === currentPage}
 				<button
@@ -61,3 +61,16 @@
 		{/each}
 	</div>
 {/key}
+
+<style>
+	.pagination-button {
+    border-radius: 0;
+    border: 0.5px solid black;
+    margin-left: 10px;
+}
+
+.pagination-button:hover {
+    background-color: aliceblue;
+}
+
+</style>
