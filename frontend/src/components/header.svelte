@@ -3,8 +3,8 @@
 	import { basket } from '../stores/basket';
 	import Basket from './modals/basket.svelte';
 
-	export let patternFilter: string = "";
-	export let searchCallback: () =>any;
+	export let patternFilter: string = '';
+	export let searchCallback: () => any;
 </script>
 
 <!-- Navbar-->
@@ -23,8 +23,10 @@
 		</button>
 		<div class="collapse navbar-collapse text-center" id="navarToggler">
 			<ul class="navbar-nav mx-auto mb-2 mb-lg-0 w-75">
-				<form class="d-flex p-1 ps-2 pe-2 mt-1 w-100 search-box"
-				on:submit|preventDefault={searchCallback}>
+				<form
+					class="d-flex p-1 ps-2 pe-2 mt-1 w-100 search-box"
+					on:submit|preventDefault={searchCallback}
+				>
 					<input
 						class="form-control"
 						placeholder="Que productos estas buscando?"
@@ -95,7 +97,7 @@
 	</div>
 </nav>
 
-<Basket/>
+<Basket />
 
 <style>
 	.wrap-text {

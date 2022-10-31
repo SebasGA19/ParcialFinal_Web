@@ -1,6 +1,27 @@
-<script>
+<script lang="ts">
+	import { onMount } from 'svelte';
 	import { apiBaseURL } from '../../api/config';
 	import { basket } from '../../stores/basket';
+
+    let total: number = 0;
+    let subTotal: number = 0;
+    let keys: string[];
+    let amount: number = 0;
+    function refresh() {
+        keys = Object.keys($basket);
+        amount = keys.length;
+        subTotal = 0;
+        keys.forEach(id => {
+            const entry = $basket[id];
+            subTotal += entry.amount * entry.article.price;
+        });
+        total = subTotal * 1.19
+    }
+    onMount(refresh);
+    $ : {
+        $basket;
+        refresh();
+    }
 </script>
 
 <!--Basket Modal-->
@@ -15,7 +36,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title text-success" id="basketModalLabel">
-					Mi carrito (<span>0</span>)
+					Mi carrito (<span>{amount}</span>)
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
@@ -23,7 +44,7 @@
 				<div class="container">
 					<div class="justify-content-center">
 						{#key $basket}
-							{#each Object.keys($basket) as articleId}
+							{#each keys as articleId}
 								<div class="row row-cols-1 row-cols-md-7">
 									<div class="col">
 										<img
@@ -58,15 +79,17 @@
 					<hr />
 					<div class="d-flex justify-content-between">
 						<h7>Subtotal:</h7>
-						<h7><span />&euro;</h7>
+						<h7>{subTotal.toFixed(2)}<span />&euro;</h7>
 					</div>
 					<hr />
 					<div class="d-flex justify-content-between text-success">
 						<h4 style="color: #009929;">TOTAL (IVA incluido):</h4>
-						<h4 class="text-success"><span />&euro;</h4>
+						<h4 class="text-success">{total.toFixed(2)}<span />&euro;</h4>
 					</div>
 					<hr />
-					<p class="text-success">Te falta 6.99 &euro; para disfrutar del envio gratis</p>
+                    {#if total < 50 && subTotal > 0}
+                    <p class="text-success">Te falta {(50 - total).toFixed(2)} &euro; para disfrutar del envio gratis</p>
+					{/if}
 				</div>
 				<button class="btn w-100 green-button" style="border-radius: 50px;">Ir al carrito</button>
 				<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;"
@@ -76,3 +99,16 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.green-button {
+		border-radius: 50px;
+		background-color: #009929;
+		color: white;
+	}
+
+	.green-button:hover {
+		background-color: #006414;
+		color: white;
+	}
+</style>
