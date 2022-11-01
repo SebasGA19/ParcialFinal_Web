@@ -69,7 +69,7 @@
 										<div class="d-flex justify-content-between">
 											<h6>Precio:</h6>
 											<h5>
-												{$basket[articleId].article.price * $basket[articleId].amount} &euro;
+												{($basket[articleId].article.price * $basket[articleId].amount * (1 - $basket[articleId].article.discount / 100)).toFixed(2)} &euro;
 											</h5>
 										</div>
 										<div class="d-flex justify-content-between">
