@@ -11,7 +11,7 @@ def register(email, names, last_names, password):
     conn = db.sqlite()
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO users (email, names, last_names, password) VALUES (?, ?, ?, ?)",
+        "INSERT INTO users (email, names, last_names, password_hash) VALUES (?, ?, ?, ?)",
         (email, names, last_names, password_hash))
     conn.commit()
 
