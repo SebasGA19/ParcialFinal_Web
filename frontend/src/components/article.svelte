@@ -13,8 +13,6 @@
 <!--Card-->
 <div class="col">
 	<div class="card product-card positiion-relative">
-		<Favourite />
-		<Discount discount={article.discount} />
 		<a href="#" data-bs-toggle="modal" data-bs-target="#articleModal{article.id}">
 			<img
 				class="card-img-top position-relative"
@@ -22,6 +20,12 @@
 				src={`${apiBaseURL}${article.image}`}
 			/>
 		</a>
+		<div style="top: 5%; left: 90%;" class="position-absolute translate-middle badge rounded-pill">
+			<Favourite />
+		</div>
+		<div style="top: 5%; left: 15%;" class="position-absolute translate-middle badge rounded-pill">
+			<Discount discount={article.discount} />
+		</div>
 		<div class="card-body text-center">
 			<div class="article-body">
 				<h4 class="card-title">{article.name}</h4>
@@ -43,7 +47,7 @@
 	aria-labelledby="{article.id}Label"
 	aria-hidden="true"
 >
-	<div class="modal-dialog modal-fullscreen">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
@@ -51,22 +55,35 @@
 			<div class="modal-body">
 				<div class="container">
 					<div class="row row-cols-1 row-cols-md-2 g-4">
-						<div class="col">
+						<div class="col text-center align-items-center">
 							<img
-								id="{article.id}Image"
 								alt={article.alt}
 								src={`${apiBaseURL}${article.image}`}
-								class="w-50"
+								class="w-75"
 							/>
 						</div>
-						<div class="col">
-							<div class="position-relative text-center">
-								<h1 class="mb-3">{article.name}</h1>
+						<div class="col p-5">
+							<div class="d-flex align-items-center">
+								<h1 class="mb-3 me-3">{article.name}</h1>
+								<div class="me-3"><Favourite /></div>
 								<Discount discount={article.discount} />
-								<Favourite />
 							</div>
-							<h5 class="mb-3">{`${article.amount} ${article.metric}`}</h5>
-							<h2 class="text-success mb-0">{article.price} &euro</h2>
+							<div class="row">
+								<div class="col">
+									<h2>Units:</h2>
+								</div>
+								<div class="col">
+									<h5 class="mb-3">{`${article.amount} ${article.metric}`}</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<h2>Price:</h2>
+								</div>
+								<div class="col">
+									<h2 class="text-success mb-0">{article.price} &euro</h2>
+								</div>
+							</div>
 							<p class="mt-5" style="text-align: justify;">{article.description}</p>
 							<div class="d-flex justify-content-between">
 								<BasketButtonOperation bind:article />
