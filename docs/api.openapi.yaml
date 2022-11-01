@@ -32,6 +32,21 @@ components:
         image:
           type: string
           example: /images/{id}
+    basket:
+      type: object
+      properties:
+        session:
+          type: string
+        articles:
+          type: object
+          properties:
+            id:
+              type: object
+              properties:
+                amount:
+                  type: number
+                article:
+                  $ref: '#/components/schemas/article'
     filter:
       type: object
       properties:
@@ -155,70 +170,18 @@ paths:
                   $ref: '#/components/schemas/article'
         '500':
           description: internal server error
-  /article/{id}:
-    post:
-      tags:
-        - Articulos
-      summary: Vitrina
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: Listado de articulos
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/article'
-        '500':
-          description: internal server error
   /basket:
-    get:
-      tags:
-        - Carrito
-      summary: consultar carrito de compras
-      responses:
-        '200':
-          description: Listado de articulos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    articulo:
-                      $ref: '#/components/schemas/article'
-                    cantidad:
-                      type: number
-                      example: 10
-        '500':
-          description: internal server error
-  /basket/{id}/{amount}:
     post:
       tags:
         - Carrito
-      summary: Anadir articulo al carrito
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: number
-            example: 10
-          description: id del producto
-          required: true
-        - in: path
-          name: amount
-          schema:
-            type: number
-            example: 10
-          description: cantidad del producto
-          required: true
+      summary: Comprar articulos en el carrito de compras
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/basket'
       responses:
         '200':
-          description: Producto anadido con exito
+          description: Operacion completada con exito
         '500':
           description: internal server error
