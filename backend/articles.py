@@ -23,3 +23,10 @@ def articles_pag(page: str):
 @articles_bp.route('/images/<id>', methods=['GET'])
 def images_id(id):
     return controller.image(id)
+
+
+@articles_bp.route('/basket', methods=["POST"])
+def basket():
+    request_data = flask.request.get_json()
+    controller.basket(request_data["session"], request_data["articles"])
+    return ""

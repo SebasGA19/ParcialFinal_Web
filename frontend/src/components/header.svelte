@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { register } from '../api/routes';
+	import { session } from '../stores/session';
 	import { basket } from '../stores/basket';
 	import Basket from './modals/basket.svelte';
 
@@ -7,6 +9,30 @@
 	export let pattern: string = '';
 	export let searchCallback: () => any;
 	export let priceCallback: () => any;
+
+	let names: string;
+	let lastNames: string;
+	let email: string;
+	let password: string;
+	let confirmPassword: string;
+
+	function doRegister() {
+		if (password !== confirmPassword) {
+			alert('Las contrasenas no coinciden');
+			return;
+		}
+		register(names, lastNames, email, password)
+			.then((s) => {
+				$session = s;
+				alert('Usuario registrado con exito');
+				names = '';
+				lastNames = '';
+				email = '';
+				password = '';
+				confirmPassword = '';
+			})
+			.catch(() => alert('registration failed'));
+	}
 </script>
 
 <!-- Navbar-->
@@ -79,7 +105,11 @@
 								<a class="dropdown-item" href="#"><i class="fa-solid fa-lock" /> Entrar</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="#"
+								<a
+									class="dropdown-item"
+									href="#"
+									data-bs-toggle="modal"
+									data-bs-target="#registrationModal"
 									><i class="fa-solid fa-user-plus" /> Crear una Cuenta</a
 								>
 							</li>
@@ -154,12 +184,82 @@
 					/>
 				</div>
 			</div>
-			<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;" on:click={priceCallback}>Filtrar</button>
+			<button
+				class="btn w-100 mt-2 mb-2 green-button"
+				style="border-radius: 50px;"
+				on:click={priceCallback}>Filtrar</button
+			>
 		</div>
 	</div>
 </div>
 
 <Basket />
+
+<!-- Registration modal -->
+<div
+	class="modal fade"
+	id="registrationModal"
+	tabindex="-1"
+	aria-labelledby="registrationModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+			</div>
+			<div class="modal-body">
+				<div class="container">
+					<form on:submit|preventDefault={doRegister}>
+						<h4>Crear nueva cuenta</h4>
+						<input
+							required
+							type="text"
+							class="form-control mt-3"
+							placeholder="Nombres"
+							bind:value={names}
+						/>
+						<input
+							required
+							type="text"
+							class="form-control mt-3"
+							placeholder="Apellidos"
+							bind:value={lastNames}
+						/>
+						<h4 class="mt-3">Informacion de inicio de sesion</h4>
+						<input
+							required
+							type="email"
+							class="form-control mt-3"
+							placeholder="Email"
+							bind:value={email}
+						/>
+						<input
+							required
+							type="password"
+							class="form-control mt-3"
+							pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{'{8,}'}"
+							placeholder="Contrasena"
+							bind:value={password}
+						/>
+						<input
+							required
+							type="password"
+							class="form-control mt-3"
+							pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{'{8,}'}"
+							placeholder="Repetir contrasena"
+							bind:value={confirmPassword}
+						/>
+						<div class="mt-4 g-recaptcha" data-sitekey="6Ldbdg0TAAAAAI7KAf72Q6uagbWzWecTeBWmrCpJ" />
+						<button class="btn w-100 green-button mt-3" style="border-radius: 50px;" type="submit"
+							>Crear cuenta</button
+						>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <style>
 	.green-button {

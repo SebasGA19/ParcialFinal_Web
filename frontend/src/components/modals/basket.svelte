@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { buy } from '../../api/routes';
 	import { onMount } from 'svelte';
 	import { apiBaseURL } from '../../api/config';
+	import { session } from '../../stores/session';
 	import { basket } from '../../stores/basket';
 	import BasketButtonOperation from '../basket/basketButtonOperation.svelte';
 	import BasketCounterOperation from '../basket/basketCounterOperation.svelte';
@@ -18,6 +20,12 @@
 			subTotal += entry.amount * entry.article.price * (1 - entry.article.discount / 100);
 		});
 		total = subTotal * 1.19;
+	}
+
+	function doBuy() {
+		if ($session !== undefined && $basket !== undefined) {
+			buy($session, $basket);
+		}
 	}
 	onMount(refresh);
 	$: {
@@ -69,7 +77,11 @@
 										<div class="d-flex justify-content-between">
 											<h6>Precio:</h6>
 											<h5>
-												{($basket[articleId].article.price * $basket[articleId].amount * (1 - $basket[articleId].article.discount / 100)).toFixed(2)} &euro;
+												{(
+													$basket[articleId].article.price *
+													$basket[articleId].amount *
+													(1 - $basket[articleId].article.discount / 100)
+												).toFixed(2)} &euro;
 											</h5>
 										</div>
 										<div class="d-flex justify-content-between">
@@ -101,7 +113,11 @@
 					{/if}
 				</div>
 				<button class="btn w-100 green-button" style="border-radius: 50px;"> Ir al carrito </button>
-				<button class="btn w-100 mt-2 mb-2 green-button" style="border-radius: 50px;">
+				<button
+					class="btn w-100 mt-2 mb-2 green-button"
+					style="border-radius: 50px;"
+					on:click={doBuy}
+				>
 					Realizar el pedido
 				</button>
 			</div>
