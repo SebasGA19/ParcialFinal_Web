@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { apiBaseURL } from '../../api/config';
 	import { basket } from '../../stores/basket';
+	import BasketButtonOperation from '../basket/basketButtonOperation.svelte';
+	import BasketCounterOperation from '../basket/basketCounterOperation.svelte';
 
 	let total: number = 0;
 	let subTotal: number = 0;
@@ -32,7 +34,7 @@
 	aria-labelledby="basketModalLabel"
 	aria-hidden="true"
 >
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title text-success" id="basketModalLabel">
@@ -45,31 +47,34 @@
 					<div class="justify-content-center">
 						{#key $basket}
 							{#each keys as articleId}
-								<div class="row row-cols-1 row-cols-md-7">
-									<div class="col">
+								<div class="row">
+									<div class="col text-center">
 										<img
-											style="width: 100px;"
+											class="w-50"
 											src={`${apiBaseURL}${$basket[articleId].article.image}`}
 											alt={$basket[articleId].article.alt}
 										/>
 									</div>
 									<div class="col">
-										<div class="container">
-											<div class="row w-100">
-												<div class="col col-8">
-													<h3 class="text-left wrap-text">{$basket[articleId].article.name}</h3>
-												</div>
-												<div class="col col-4">
-													<button type="button" class="col-2 btn-close" />
-												</div>
-											</div>
-											<h6>{1}</h6>
-											<div class="d-flex justify-content-between">
-												<h6>Canitdad: {$basket[articleId].amount}</h6>
-												<h5>
-													{$basket[articleId].article.price * $basket[articleId].amount} &euro;
-												</h5>
-											</div>
+										<div class="d-flex justify-content-between">
+											<h3 class="text-left wrap-text">{$basket[articleId].article.name}</h3>
+											<button type="button" class="col-2 btn-close" />
+										</div>
+										<div class="d-flex justify-content-between">
+											<h6>Canitdad:</h6>
+											<h5>
+												{$basket[articleId].amount}
+											</h5>
+										</div>
+										<div class="d-flex justify-content-between">
+											<h6>Precio:</h6>
+											<h5>
+												{$basket[articleId].article.price * $basket[articleId].amount} &euro;
+											</h5>
+										</div>
+										<div class="d-flex justify-content-between">
+											<BasketButtonOperation article={$basket[articleId].article} />
+											<BasketCounterOperation article={$basket[articleId].article} />
 										</div>
 									</div>
 								</div>
