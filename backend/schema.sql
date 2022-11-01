@@ -1,6 +1,15 @@
 CREATE TABLE IF NOT EXISTS users (
-    email TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
     names TEXT NOT NULL,
     last_names TEXT NOT NULL,
-    password TEXT NOT NULL
+    password_hash TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS baskets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    buyer INTEGER REFERENCES users (id),
+    products TEXT NOT NULL,
+    subtotal FLOAT NOT NULL,
+    total FLOAT NOT NULL
 );
