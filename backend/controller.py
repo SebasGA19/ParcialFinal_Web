@@ -46,7 +46,7 @@ def store_cookie(email) -> str:
     cursor.execute("SELECT id from users WHERE email = ? LIMIT 1", (email, ))
     user_id = cursor.fetchone()[0]
     sessions[cookie] = user_id
-    with open("sessions.json", 'w') as file:
+    with open("data/sessions.json", 'w') as file:
         json.dump(sessions, file)
     return cookie
 
