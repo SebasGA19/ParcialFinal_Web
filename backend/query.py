@@ -1,6 +1,7 @@
 import sqlite3
+import sys
 
-conn = sqlite3.connect('database.db')
+conn = sqlite3.connect(sys.argv[1])
 cursor = conn.cursor()
 
 cursor.execute("SELECT * FROM users")

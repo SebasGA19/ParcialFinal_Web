@@ -5,6 +5,21 @@ import random
 import db
 
 
+def sanitize_mongo_article(article) -> dict:
+    article = {
+        "id": article["id"],
+        "amount": article["amount"],
+        "metric": article["metric"],
+        "name": article["name"],
+        "description": article["description"],
+        "price": article["price"],
+        "image": article["image"],
+        "alt": article["alt"],
+        "discount": article["discount"]
+    }
+    return article
+
+
 def register(email, names, last_names, password):
     password_hash = hashlib.sha3_512(password.encode()).hexdigest()
     conn = db.sqlite()
@@ -16,13 +31,13 @@ def register(email, names, last_names, password):
 
 
 def get_cookie(cookie) -> int:
-    with open("sessions.json") as file:
+    with open("data/sessions.json") as file:
         sessions = json.load(file)
     return sessions[cookie]
 
 
 def store_cookie(email) -> str:
-    with open("sessions.json") as file:
+    with open("data/sessions.json") as file:
         sessions = json.load(file)
     cookie = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz1234567890')
                      for _ in range(32))
@@ -36,20 +51,27 @@ def store_cookie(email) -> str:
     return cookie
 
 
-with open('json/data.json', "rb") as file:
-    __articles = json.load(file)
-
-
 def articles(page: int, pattern: str = "", min_price: int = 0, max_price: int = 100) -> list[dict]:
     pattern = pattern if pattern is not None else ""
     min_price = min_price if min_price is not None else -1
     max_price = max_price if max_price is not None else 1000
 
-    result = list(filter(
-        lambda article: pattern in article["name"] and
-        min_price <= article["price"] <= max_price,
-        __articles
-    ))
+    filter = {
+        "name": {
+            "$regex": f".*{pattern}.*",
+            '$options' : 'i'
+        },
+        "price": {
+            "$lte": max_price,
+            "$gte": min_price
+        }
+    }
+
+    mongo_client = db.mongo()
+
+    result = [sanitize_mongo_article(
+        a) for a in mongo_client["parcial"]["articles"].find(filter)]
+
     range_low = (page-1)*12
     range_high = (page)*12
     pages = int(len(result) / 12) + 1
@@ -68,9 +90,12 @@ def basket(session, articles):
     user_id = get_cookie(session)
     articles_ids = list(map(int, articles.keys()))
     subtotal = 0
-    for article in __articles:
-        if article["id"] in articles_ids:
-            subtotal += article["price"] * articles[str(article["id"])]["amount"] * (1 - article["discount"] / 100)
+    for article in db.mongo()["parcial"]["articles"].find(
+        {"id": {"$in": articles_ids}}
+    ):
+        subtotal += article["price"] * \
+            articles[str(article["id"])]["amount"] * \
+            (1 - article["discount"] / 100)
     total = subtotal * 1.19
     conn = db.sqlite()
     cursor = conn.cursor()

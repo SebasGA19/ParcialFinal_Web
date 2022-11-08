@@ -24,7 +24,7 @@
 
 	function doBuy() {
 		if ($session !== undefined && $basket !== undefined) {
-			buy($session, $basket);
+			buy($session, $basket).then(() => alert("Compra realizada con exito")).catch("compra fallo");
 		}
 	}
 	onMount(refresh);
@@ -66,7 +66,7 @@
 									<div class="col">
 										<div class="d-flex justify-content-between">
 											<h3 class="text-left wrap-text">{$basket[articleId].article.name}</h3>
-											<button type="button" class="col-2 btn-close" />
+											
 										</div>
 										<div class="d-flex justify-content-between">
 											<h6>Canitdad:</h6>

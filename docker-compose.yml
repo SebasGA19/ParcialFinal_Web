@@ -1,0 +1,49 @@
+version: "3.3"
+
+networks:
+  parcial:
+    external: false
+
+services:
+  mongo:
+    container_name: parcial-mongo
+    image: mongo:latest
+    restart: unless-stopped
+    networks:
+      - parcial
+    volumes:
+      - type: bind
+        source: ./mongo-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: parcial
+  api:
+    depends_on:
+      - mongo
+    container_name: parcial-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - parcial
+    volumes:
+      - ./backend-data:/backend/data
+    ports:
+      - "127.0.0.1:5000:5000"
+  frontend:
+    depends_on:
+      - api
+    container_name: frontend-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - parcial
+    ports:
+      - "127.0.0.1:8000:3000"

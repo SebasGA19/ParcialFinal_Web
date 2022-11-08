@@ -2,3 +2,5 @@
 backend/__pycache__
 backend/sessions.json
 backend/database.db
+backend-data
+mongo-data
