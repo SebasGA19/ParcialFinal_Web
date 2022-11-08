@@ -9,12 +9,10 @@
 	export let filter: Filter;
 	onMount(() => {
 		if (result == undefined) {
-			{
-			}
 			articles(1, filter).then((r) => {
 				result = r;
 				currentPage = 1;
-			});
+			}).catch();
 		}
 	});
 	$: {
@@ -22,7 +20,7 @@
 		articles(1, filter).then((r) => {
 			result = r;
 			currentPage = 1;
-		});
+		}).catch();
 	}
 </script>
 
@@ -43,7 +41,7 @@
 							result = r;
 							currentPage = page + 1;
 							scroll(0, 0);
-						});
+						}).catch();
 					}}>{page + 1}</button
 				>
 			{:else}
@@ -54,7 +52,7 @@
 							result = r;
 							currentPage = page + 1;
 							scroll(0, 0);
-						});
+						}).catch();
 					}}>{page + 1}</button
 				>
 			{/if}
