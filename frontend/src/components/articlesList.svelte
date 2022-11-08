@@ -8,19 +8,27 @@
 	let result: ArticleResult = { pages: 1, articles: [] };
 	export let filter: Filter;
 	onMount(() => {
-		if (result == undefined) {
-			articles(1, filter).then((r) => {
-				result = r;
-				currentPage = 1;
-			}).catch();
+		if (process && process.browser) {
+			if (result == undefined) {
+				articles(1, filter)
+					.then((r) => {
+						result = r;
+						currentPage = 1;
+					})
+					.catch();
+			}
 		}
 	});
 	$: {
-		filter;
-		articles(1, filter).then((r) => {
-			result = r;
-			currentPage = 1;
-		}).catch();
+		if (process && process.browser) {
+			filter;
+			articles(1, filter)
+				.then((r) => {
+					result = r;
+					currentPage = 1;
+				})
+				.catch();
+		}
 	}
 </script>
 
@@ -37,22 +45,30 @@
 				<button
 					class="btn border-5 btn-secondary pagination-button"
 					on:click={() => {
-						articles(page + 1, filter).then((r) => {
-							result = r;
-							currentPage = page + 1;
-							scroll(0, 0);
-						}).catch();
+						if (process && process.browser) {
+							articles(page + 1, filter)
+								.then((r) => {
+									result = r;
+									currentPage = page + 1;
+									scroll(0, 0);
+								})
+								.catch();
+						}
 					}}>{page + 1}</button
 				>
 			{:else}
 				<button
 					class="btn border-5 pagination-button"
 					on:click={() => {
-						articles(page + 1, filter).then((r) => {
-							result = r;
-							currentPage = page + 1;
-							scroll(0, 0);
-						}).catch();
+						if (process && process.browser) {
+							articles(page + 1, filter)
+								.then((r) => {
+									result = r;
+									currentPage = page + 1;
+									scroll(0, 0);
+								})
+								.catch();
+						}
 					}}>{page + 1}</button
 				>
 			{/if}
@@ -62,13 +78,12 @@
 
 <style>
 	.pagination-button {
-    border-radius: 0;
-    border: 0.5px solid black;
-    margin-left: 10px;
-}
+		border-radius: 0;
+		border: 0.5px solid black;
+		margin-left: 10px;
+	}
 
-.pagination-button:hover {
-    background-color: aliceblue;
-}
-
+	.pagination-button:hover {
+		background-color: aliceblue;
+	}
 </style>

@@ -24,7 +24,9 @@
 
 	function doBuy() {
 		if ($session !== undefined && $basket !== undefined) {
+			if (process && process.browser) {
 			buy($session, $basket).then(() => alert("Compra realizada con exito")).catch();
+			}
 		}
 	}
 	onMount(refresh);

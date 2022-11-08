@@ -21,6 +21,7 @@
 			alert('Las contrasenas no coinciden');
 			return;
 		}
+		if (process && process.browser) {
 		register(names, lastNames, email, password)
 			.then((s) => {
 				$session = s;
@@ -32,6 +33,7 @@
 				confirmPassword = '';
 			})
 			.catch(() => alert('registration failed'));
+		}
 	}
 </script>
 
